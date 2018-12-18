@@ -15,7 +15,7 @@ public class Main {
         while (true) {
             boolean isActive = readInput();
 
-            if(!isActive) {
+            if (!isActive) {
                 break;
             }
 
@@ -37,6 +37,9 @@ public class Main {
             case SUBTRACT:
                 clock.subtractMinutes(minutes);
                 break;
+            default:
+                System.out.println("You entered incorrect action!\n");
+                break;
         }
     }
 
@@ -47,14 +50,14 @@ public class Main {
         System.out.println("The minutes should be of type Integer: ");
         String line = in.nextLine();
 
-        if(line.toUpperCase().equals(END)) {
+        if (line.toUpperCase().equals(END)) {
             return false;
         }
 
         try {
             minutes = Integer.parseInt(line);
         } catch (NumberFormatException e) {
-            System.out.println("Please enter correct data!\n");
+            System.out.println("You entered incorrect data!\n");
             readInput();
         }
 

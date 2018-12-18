@@ -21,7 +21,11 @@ public class RobotSimulator {
     public static void main(String[] args) {
         readInput();
 
-        processInstructions();
+        boolean isValid = processInstructions();
+
+        if (!isValid) {
+            return;
+        }
 
         printResult();
     }
@@ -29,16 +33,26 @@ public class RobotSimulator {
     private static void readInput() {
         Scanner in = new Scanner(System.in);
 
-        System.out.println("Please enter starting X coordinate: ");
-        x = Integer.parseInt(in.nextLine());
-        System.out.println("Please enter starting Y coordinate: ");
-        y = Integer.parseInt(in.nextLine());
+        try {
+            System.out.println("Please enter starting X coordinate: ");
+            x = Integer.parseInt(in.nextLine());
+            System.out.println("Please enter starting Y coordinate: ");
+            y = Integer.parseInt(in.nextLine());
+
+        } catch (NumberFormatException e) {
+            System.out.println("You entered incorrect data!\n");
+            readInput();
+        }
 
         System.out.println("Please enter facing direction");
         System.out.println("It should be EAST, WEST, NORTH or SOUTH: ");
         String direction = in.nextLine();
 
-        initDirections(direction);
+        boolean isDirectionValid = initDirections(direction);
+
+        if (!isDirectionValid) {
+            readInput();
+        }
 
         System.out.println("Please enter your instructions");
         System.out.println("They should be in format RAL (e.g. RAALAL) where R stands for right, " +
@@ -46,7 +60,7 @@ public class RobotSimulator {
         instructions = in.nextLine();
     }
 
-    private static void initDirections(String direction) {
+    private static boolean initDirections(String direction) {
         switch (direction) {
             case NORTH:
                 directionX = 0;
@@ -64,10 +78,15 @@ public class RobotSimulator {
                 directionX = -1;
                 directionY = 0;
                 break;
+            default:
+                System.out.println("You entered incorrect direction!\n");
+                return false;
         }
+
+        return true;
     }
 
-    private static void processInstructions() {
+    private static boolean processInstructions() {
         for (int index = 0; index < instructions.length(); index++) {
             String currentCommand = instructions.substring(index, index + 1);
 
@@ -81,8 +100,13 @@ public class RobotSimulator {
                 case ADVANCE:
                     changeCoordinates();
                     break;
+                default:
+                    System.out.println("You entered incorrect instruction!\n");
+                    return false;
             }
         }
+
+        return true;
     }
 
     private static void turnRight() {
